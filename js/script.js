@@ -29,6 +29,7 @@ const checkWinner = (player1, player2) => {
 var token = ""
 var reacted = ""
 var selected = ""
+var res = "tie"
 var citizens = 3
 
 token = window.location.href.split("?token=")[1]
@@ -36,10 +37,12 @@ const t = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
 $("#emperor").click(()=>{
     io.emit("action", "emperor" ,token)
     selected = "emperor"
+    special = ""
 })
 $("#slave").click(()=>{
     io.emit("action", "slave" ,token)
     selected = "slave"
+    special = ""
 })
 $("#citizen1").click(()=>{
     io.emit("action", "citizen" ,token)
@@ -58,8 +61,8 @@ $("#citizen3").click(()=>{
 })
 
 const startGame = () => {
-    putCards(citizens, special)
     count(10)
+    putCards(citizens, special)
     setTimeout(()=>{
         hideCards()
         showWinner(selected, reacted)
@@ -67,6 +70,7 @@ const startGame = () => {
             putCards(citizens, special)
         },3000)
     }, 11000)
+    return checkWinner(selected, reacted)
 }
 
 // check if he is the second player
@@ -79,7 +83,15 @@ if (token)
     })
     io.emit("join-room", token)
     io.emit("player2", token)
-    startGame()
+    for (let i = 0; i < 3; i++) {
+        setTimeout(()=>{
+            res = startGame()
+            console.log(res)
+            if (res !== "tie") {
+                alert(res)
+            }
+        },i * 13000)
+    }
 }
 // first player
 else {
@@ -95,7 +107,15 @@ else {
     io.emit("join-room", token)
     io.on("ready", ()=>{
         $(".model").hide()
-        startGame()
+        for (let i = 0; i < 3; i++) {
+            setTimeout(()=>{
+                res = startGame()
+                console.log(res)
+                if (res !== "tie") {
+                    alert(res)
+                }
+            },i * 13000)
+        }
     })
 }
 

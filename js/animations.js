@@ -12,17 +12,15 @@ const hideCards = () => {
 	$("#citizen3").animate({marginBottom: '-250px'}, 1600)
 	$("#slave").animate({marginBottom: '-250px'}, 1000)
 	$(".timer").animate({marginLeft: "-210%"}, 2000)
-	setTimeout(()=>{
-		$(".timer").hide()
-		$(".result").css({'display': "flex"})
-		$(".cards").hide()
-	}, 2000)
+	$(".timer").hide()
+	$(".result").css({'display': "flex"})
+	$(".cards").hide()
 }
 const putCards = (citizens, special) => {
-	$(".timer").animate({marginLeft: "-0%"}, 2000)
+	$(".timer").animate({marginLeft: "0%"}, 2000)
+	$(".result").hide()
 	setTimeout(()=>{
 		$(".timer").css({'display': "flex"})
-		$(".result").hide()
 	}, 2000)
 	while (citizens > 0) {
 		$("#citizen"+citizens).show()
@@ -41,6 +39,7 @@ const showWinner = (p1,p2) =>
 {
 	$(".res").show()
 	console.log(p1+p2)
+	document.getElementById("result").innerHTML = ""
 	document.getElementById("result").innerHTML += "<div class='res'><img src='./imgs/"+p1+".jpg'></div>"
 	document.getElementById("result").innerHTML += "<div class='res'><img src='./imgs/"+p2+".jpg'></div>"
 }
