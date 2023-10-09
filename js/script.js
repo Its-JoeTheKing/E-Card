@@ -1,4 +1,4 @@
-io = io("ws://127.0.0.1:3000")
+io = io("https://ecard-server.adaptable.app")
 
 const count = (sec) => {
     var i = sec;
