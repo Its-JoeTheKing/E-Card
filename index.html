@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="stylesheet" href="styles.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<div class="model">
+	<div class="m-cont">
+		<h1>ROOM LINK</h1>
+		<input type="text" id="room" disabled>
+		<div class="succ">
+			<h1>Copied ROOM LINK !</h1>
+			<p>Waiting oponent to connect ...</p>
+		</div>
+	</div>
+</div>
+<body>
+	<div class="cont">
+		<header class="score">
+			<div class="p1-score">
+				<p>PLAYER 1 SCORE : 0</p>
+			</div>
+			<div class="p2-score">
+				<p>PLAYER 1 SCORE : 0</p>
+			</div>
+		</header>
+		<div class="timer">
+			<h1 id="counter">30</h1>
+		</div>
+		<div class="result" id="result">
+		</div>
+		<div class="deck" id="deck">
+			<div class="cards" style="display: none;" id="emperor">
+				<img src="./imgs/emperor.jpg" width="100%">
+			</div>
+			<div class="cards" style="display: none;" id="slave">
+				<img src="./imgs/slave.jpg" width="100%">
+			</div>
+			<div class="cards citizen1" style="display: none;" id="citizen1">
+				<img src="./imgs/citizen.jpg" width="100%">
+			</div>
+			<div class="cards citizen2" style="display: none;" id="citizen2">
+				<img src="./imgs/citizen.jpg" width="100%">
+			</div>
+			<div class="cards citizen3" style="display: none;" id="citizen3">
+				<img src="./imgs/citizen.jpg" width="100%">
+			</div>
+		</div>
+	</div>
+	<div class="tuto">
+		<h1>Strength</h1>
+		<div class="part-1">
+			<div class="card">
+				<img src="./imgs/emperor.jpg">
+			</div>
+			<div class="card">
+				<img src="./imgs/citizen.jpg" height="180">
+			</div>
+			<div class="card">
+				<img src="./imgs/slave.jpg" height="120">
+			</div>
+		</div>
+		<h1>Rules</h1>
+		<p>
+			1. King > Citizen > Slave > King <br>
+			2. there are 2 sides : <br>
+			> King Side : Citizen - Citizen - Citizen - King <br>
+			> Slave Side : Citizen - Citizen - Citizen - Slave <br>
+			3. Winning on the King Side earns you 10 points. <br>
+			4. Winning on the Slave Side earns you 30 points.
+		</p>
+	</div>
+</body>
+</html>
+<p id="selected" hidden></p>
+<script src="js/animations.js"></script>
+<script src="js/socket.io.min.js" crossorigin="anonymous"></script>
+<script src="js/script.js"></script>
+
