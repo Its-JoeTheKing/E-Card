@@ -72,6 +72,20 @@ const startGame = () => {
     }, 11000)
     return checkWinner(selected, reacted)
 }
+function stopLoop() {
+    if (timeoutId) {
+        clearTimeout(timeoutId);
+    }
+}
+var gameOver = (result) => {
+    if (result === "You Lost")
+    {
+        $(".gameOverLost").css({"display": "flex"})
+    }
+    if (result === "You Won") {
+        $(".gameOverWin").css({"display": "flex"})
+    }
+}
 
 // check if he is the second player
 if (token)
@@ -83,15 +97,23 @@ if (token)
     })
     io.emit("join-room", token)
     io.emit("player2", token)
-    for (let i = 0; i < 3; i++) {
-        setTimeout(()=>{
-            res = startGame()
-            console.log(res)
-            if (res !== "tie") {
-                alert(res)
-            }
-        },i * 13000)
+    var i = 0
+    var timeoutId = null;
+    function checkAndStartGame() {
+        if (i <= 4) {
+            timeoutId = setTimeout(() => {
+                var res = startGame();
+                if (res !== "tie") {
+                    stopLoop()
+                    gameOver(res)
+                } else {
+                    i++;
+                    checkAndStartGame(); // Continue the loop
+                }
+            }, i * 13000);
+        }
     }
+    checkAndStartGame();
 }
 // first player
 else {
@@ -107,15 +129,23 @@ else {
     io.emit("join-room", token)
     io.on("ready", ()=>{
         $(".model").hide()
-        for (let i = 0; i < 3; i++) {
-            setTimeout(()=>{
-                res = startGame()
-                console.log(res)
-                if (res !== "tie") {
-                    alert(res)
-                }
-            },i * 13000)
+        var i = 0
+        var timeoutId = null;
+        function checkAndStartGame() {
+            if (i <= 4) {
+                timeoutId = setTimeout(() => {
+                    var res = startGame();
+                    if (res !== "tie") {
+                        stopLoop()
+                        gameOver(res)
+                    } else {
+                        i++;
+                        checkAndStartGame(); // Continue the loop
+                    }
+                }, i * 13000);
+            }
         }
+        checkAndStartGame();
     })
 }
 
