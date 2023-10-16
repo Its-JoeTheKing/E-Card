@@ -1,7 +1,8 @@
-io = io("https://ecard-server.adaptable.app"); // Assuming you want to establish a socket.io connection
+// Assuming you want to establish a socket.io connection
+io = io("ws://127.0.0.1:3000");
 
 const count = (sec) => {
-    var i = sec;
+    let i = sec;
     const intervalId = setInterval(() => {
         if (i > 0) {
             i--;
@@ -26,38 +27,54 @@ const checkWinner = (player1, player2) => {
     return outcomes[key] || "time out";
 };
 
-var token = "";
-var reacted = "";
-var selected = "";
-var res = "tie";
-var citizens = 3;
-var special = ""; // Initialize special variable
+let token = "";
+let reacted = "";
+let selected = "";
+let res = "tie";
+let citizens = 3;
+let special = ""; // Initialize special variable
+let saction = "p1-action";
 
 token = window.location.href.split("?token=")[1];
 
-const t = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+if (token) {
+    saction = "p2-action";
+}
+
+const t = [
+    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+    "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+    "U", "V", "W", "X", "Y", "Z"
+];
 
 $("#emperor").click(() => {
-    io.emit("action", "emperor", token);
+    io.emit(saction, "emperor", token);
     selected = "emperor";
-    special = ""; // Clear the special variable
+    special = "";
 });
 
 $("#slave").click(() => {
-    io.emit("action", "slave", token);
+    io.emit(saction, "slave", token);
     selected = "slave";
-    special = ""; // Clear the special variable
+    special = "";
 });
 
-$("#citizen1, #citizen2, #citizen3").click(() => { // Combine citizen1, citizen2, and citizen3 event handlers
+$("#citizen1, #citizen2, #citizen3").click(() => {
     if (citizens > 0) {
-        io.emit("action", "citizen", token);
+        io.emit(saction, "citizen", token);
         selected = "citizen";
         citizens--;
     }
 });
 
 const startGame = () => {
+    io.on("p2-action", (react) => {
+        reacted = react;
+    });
+    
+    io.on("p1-action", (react) => {
+        reacted = react;
+    });
     count(10);
     // Assuming putCards, hideCards, and showWinner functions are defined elsewhere
     putCards(citizens, special);
@@ -71,13 +88,15 @@ const startGame = () => {
     return checkWinner(selected, reacted);
 };
 
+let timeoutId = null;
+
 function stopLoop() {
     if (timeoutId) {
         clearTimeout(timeoutId);
     }
 }
 
-var gameOver = (result) => {
+const gameOver = (result) => {
     if (result === "You Lost") {
         $(".gameOverLost").css({ "display": "flex" });
     }
@@ -90,28 +109,27 @@ var gameOver = (result) => {
 if (token) {
     special = "slave";
     $(".model").hide();
-    io.on("action", (react) => {
-        reacted = react;
-    });
     io.emit("join-room", token);
     io.emit("player2", token);
-    var i = 0;
-    var timeoutId = null;
+
+    let i = 0;
+
     function checkAndStartGame() {
         if (i < 4) {
             timeoutId = setTimeout(() => {
-                var res = startGame();
-                console.log(res)
+                let res = startGame();
+                console.log(reacted + "vs" + selected);
                 if (res !== "tie" && res !== "time out") {
                     stopLoop();
                     gameOver(res);
                 } else {
-                    i++;
                     checkAndStartGame(); // Continue the loop
+                    i++;
                 }
-            }, 13000);
+            }, (i !== 0) * 13000);
         }
     }
+
     checkAndStartGame();
 }
 // First player
@@ -121,30 +139,28 @@ else {
     for (let i = 0; i < 7; i++) {
         token += t[Math.floor(Math.random() * t.length)];
     }
-    io.on("action", (react) => {
-        reacted = react;
-    });
     $("#room").val(window.location.origin + "?token=" + token);
     io.emit("join-room", token);
     io.on("ready", () => {
         $(".model").hide();
-        var i = 0;
-        var timeoutId = null;
+        let i = 0;
+
         function checkAndStartGame() {
             if (i < 4) {
                 timeoutId = setTimeout(() => {
-                    var res = startGame();
-                    console.log(res)
+                    let res = startGame();
+                    console.log(reacted + "vs" + selected);
                     if (res !== "tie" && res !== "time out") {
                         stopLoop();
                         gameOver(res);
                     } else {
-                        i++;
                         checkAndStartGame(); // Continue the loop
+                        i++;
                     }
-                }, 13000);
+                }, (i !== 0) * 13000);
             }
         }
+
         checkAndStartGame();
     });
 }
