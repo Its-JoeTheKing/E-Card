@@ -17,6 +17,7 @@ const hideCards = () => {
 	$(".cards").hide()
 }
 const putCards = (citizens, special) => {
+	unset()
 	$(".timer").animate({marginLeft: "0%"}, 2000)
 	$(".result").hide()
 	setTimeout(()=>{
@@ -38,7 +39,6 @@ const putCards = (citizens, special) => {
 const showWinner = (p1,p2) =>
 {
 	$(".res").show()
-	console.log(p1+p2)
 	document.getElementById("result").innerHTML = ""
 	document.getElementById("result").innerHTML += "<div class='res'><img src='./imgs/"+p1+".jpg'></div>"
 	document.getElementById("result").innerHTML += "<div class='res'><img src='./imgs/"+p2+".jpg'></div>"
