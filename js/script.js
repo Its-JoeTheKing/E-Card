@@ -1,5 +1,5 @@
 // Assuming you want to establish a socket.io connection
-io = io("ws://127.0.0.1:3000");
+io = io("https://ecard-server.adaptable.app");
 
 const count = (sec) => {
     let i = sec;
@@ -24,6 +24,7 @@ const checkWinner = (player1, player2) => {
         "citizen-citizen": "tie"
     };
     const key = `${player1}-${player2}`;
+    selected = ""
     return outcomes[key] || "time out";
 };
 
@@ -60,7 +61,7 @@ $("#slave").click(() => {
 });
 
 $("#citizen1, #citizen2, #citizen3").click(() => {
-    if (citizens > 0) {
+    if (citizens > 0 && selected === "") {
         io.emit(saction, "citizen", token);
         selected = "citizen";
         citizens--;
