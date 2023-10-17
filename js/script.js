@@ -140,7 +140,7 @@ else {
     for (let i = 0; i < 7; i++) {
         token += t[Math.floor(Math.random() * t.length)];
     }
-    $("#room").val(window.location.origin + "?token=" + token);
+    $("#room").val(window.location.href.split("?")[0] + "?token=" + token);
     io.emit("join-room", token);
     io.on("ready", () => {
         $(".model").hide();
