@@ -1,5 +1,5 @@
 // Assuming you want to establish a socket.io connection
-io = io("https://ecard-server.adaptable.app");
+io = io("https://e-card-server-9gav.onrender.com");
 
 const count = (sec) => {
     let i = sec;
